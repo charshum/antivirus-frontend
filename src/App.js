@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import Main from './components/main';
+import axios from 'axios'
 
 function App() {
+
+  const [orgData, setOrgData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://go-api-dot-antivirus-center.appspot.com/getOrg",
+        {
+          auth: {
+            username: 'admin',
+            password: 'admin'
+          }
+        }
+      )
+      .then(({ data }) => {
+        setOrgData(data);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Main orgData={orgData}/>
   );
 }
 
