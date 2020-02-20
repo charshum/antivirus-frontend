@@ -5,15 +5,14 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import KeyValueRow from './KeyValueRow';
+import { KeyValueRow, KeyListValueRow } from './KeyValueRow';
 import ContactIcon from './ContactIcon';
+import { RESOURCES_LIST, SERVING_TARGET } from '..';
+
 
 const useStyles = makeStyles({
     root: {
-      maxWidth: 400,
-      minHeight: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto',
+      
     },
     bullet: {
       display: 'inline-block',
@@ -26,6 +25,9 @@ const useStyles = makeStyles({
     pos: {
       marginBottom: 12,
     },
+    resourceList:{
+
+    }
   });
 
 const displayFields = [
@@ -67,6 +69,26 @@ function OrganizationCard(props){
     const classes = useStyles();
 
     const { org } = props;
+    let resourceList = org.resources.map(r => {
+        let res = RESOURCES_LIST.find(res => res.id == r);
+        if(res){
+            return res.text;
+        }
+        return "";
+    });
+    if(org.customResources != ''){
+        resourceList.push(org.customResources);
+    }
+    let servingList = org.servingTargets.map(t => {
+        let tar = SERVING_TARGET.find(tar => tar.id == t);
+        if(tar){
+            return tar.text;
+        }
+        return "";
+    });
+    if(org.customServingTarget != ''){
+        servingList.push(org.customServingTarget);
+    }
     return(
         <Card className={classes.root}>
             <CardContent>
@@ -74,10 +96,15 @@ function OrganizationCard(props){
                 {org.name}
                 </Typography>
                 {displayFields.map(f => {
-                    return (
-                        <KeyValueRow keyName={f.title} value={org[f.key]}/>
-                    )
+                    if(org[f.key] != ''){
+                        return (
+                            <KeyValueRow keyName={f.title} value={org[f.key]}/>
+                        )
+                    }
+                    
                 })}
+                <KeyListValueRow keyName={"資源類別"} valueList={resourceList}/>
+                <KeyListValueRow keyName={"服務對象"} valueList={servingList}/>
             </CardContent>
             <CardActions>
                 {

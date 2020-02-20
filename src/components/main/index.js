@@ -35,7 +35,9 @@ const useStyles = makeStyles((theme) =>
             flexGrow: 1,
         },
         appBar: {
-            backgroundColor: '#008678'
+            top: 175,
+            backgroundColor: '#008678',
+            position: 'fixed'
         },
         tabs:{
             display: 'flex'
@@ -44,7 +46,13 @@ const useStyles = makeStyles((theme) =>
             flexGrow: 1
         },
         tabContent:{
-            backgroundColor: '#6fe9d8'
+            backgroundColor: '#6fe9d8',
+            paddingTop: 223
+        },
+        emptyTab:{
+            textAlign: 'center',
+            color: '#ffffff',
+            marginTop: 100
         }
     }),
 );
@@ -67,7 +75,9 @@ function Main(props){
                 </Tabs>
             </AppBar>
             <TabContent index={0} value={value}>
-                Activity
+                <div className={classes.emptyTab}>
+                    {"暫無活動"}
+                </div>
             </TabContent>
             <TabContent index={1} value={value}>
                 <Organization data={orgData}/>

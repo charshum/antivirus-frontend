@@ -8,20 +8,46 @@ const useStyles = makeStyles({
     },
     label:{
         flexGrow: 1,
-        width: '20%',
+        width: '25%',
         fontSize: 14
 
     },
     value:{
         flexGrow: 1,
-        width: '80%',
+        width: '75%',
         fontSize: 14
     }
 
 });
 
+export function KeyListValueRow(props){
+    const {keyName, valueList} = props;
+    const classes = useStyles();
+    return (
+        <div className={classes.row}>
+            <Typography className={classes.label} color="textSecondary" gutterBottom>
+                {keyName}
+            </Typography>
+            <div className={classes.value}>
+                    {
+                        valueList.map(value => {
+                            if(value != ''){
+                                return(<Typography  className={classes.value} color="textSecondary" gutterBottom>
+                                    {value}
+                                </Typography>)                              
+                            }else{
+                                return "";
+                            }
+                        })
+                    }
+            </div>
 
-function KeyValueRow(props){
+        </div>
+    )   
+}
+
+
+export function KeyValueRow(props){
     const {keyName, value} = props;
     const classes = useStyles();
     return (
@@ -36,4 +62,3 @@ function KeyValueRow(props){
     )
 }
 
-export default KeyValueRow;
