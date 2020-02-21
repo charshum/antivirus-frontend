@@ -39,18 +39,18 @@ const useStyles = makeStyles({
       right: 30
   },
   searchComponentMobile:{
-    top: 223,
+    top: 143,
     position: 'fixed',
     background: '#008678',
-    height: 'calc(100% - 223px)',
+    height: 'calc(100% - 143px)',
     right: 0
   },
   searchComponentBg:{
     position: 'fixed',
-    top: 223,
+    top: 143,
     right: 0,
     zIndex: 1200,
-    height: 'calc(100% - 223px)',
+    height: 'calc(100% - 143px)',
     background: '#008678',
     
   },
@@ -63,8 +63,6 @@ const useStyles = makeStyles({
     left: 30,
     zIndex: 1200,
     width: 300,
-    maxHeight: 'calc(100% - 100px)',
-    overflowY: 'auto',
     marginLeft: 20,
     marginRight: 20,
     marginBottom: 20,
@@ -74,6 +72,11 @@ const useStyles = makeStyles({
     boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)',
     "& .MuiPaper-elevation1":{
         boxShadow: 'none'
+    },
+    ['@media(max-width: 600px)']:{
+        top: 80,
+        left: 'auto',
+        right: 'auto'
     }
   },
   item:{
@@ -89,10 +92,10 @@ const useStyles = makeStyles({
       boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)',
   },
   searchFAB:{
-      position: "absolute",
-      top: 20,
-      right: 20,
-      zIndex: 1200
+    top: 163,
+    right: 20,
+    position: 'fixed',
+    zIndex: 1200
   },
   searchFABHide:{
       display: 'none'
@@ -111,11 +114,26 @@ const useStyles = makeStyles({
   hideSearchComponent:{
       transform: 'translateX(290px)',
       position: 'fixed',
-      top: 223,
+      top: 143,
       right: 0,
       zIndex: 1200,
-      height: 'calc(100% - 223px)',
+      height: 'calc(100% - 143px)',
       background: '#008678',
+  },
+  cardBar:{
+    display: 'block',
+    height: 20,
+    position: 'relative'
+  },
+  closeCardButton:{
+    position: 'absolute',
+    right: 10,
+    cursor: 'pointer',
+    color: '#757575'
+  },
+  cardContent:{
+    maxHeight: 'calc(100vh - 300px)',
+    overflowY: 'auto'
   }
 });
 
@@ -386,6 +404,10 @@ function Organization(props){
         setShowSearch(false);
     }
 
+    const handleCloseCard = () => {
+        setCurrentCard(-1);
+    }
+
     let currentOrg = data.find(org => org.id == currentCard);
     return(
         <div className={classes.mapRoot}>
@@ -430,7 +452,15 @@ function Organization(props){
                 </Map>
             </div>
             {
-                currentOrg && mapView == 0 ?  <div className={classes.currentCard}><OrganizationCard org={currentOrg}/></div>: ""
+                currentOrg && mapView == 0 ?  
+                <div className={classes.currentCard}>
+                    <div className={classes.cardBar}>
+                        <CloseIcon className={classes.closeCardButton} onClick={handleCloseCard}/>
+                    </div>
+                    <div className={classes.cardContent}>
+                        <OrganizationCard org={currentOrg}/>  
+                    </div>
+                </div> : ""
             }
             <div hidden={mapView == 0} className={classes.listView}>
                 <Grid className={classes.root} container justify="center" spacing={0}>

@@ -4,9 +4,12 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createMuiTheme, makeStyles, ThemeProvider, createStyles } from '@material-ui/core/styles';
 import Banner from './banner/banner';
 import Organization from '../organizations';
+import teal from '@material-ui/core/colors/teal';
+import { AboutUs } from '../aboutus';
+
 
 
 function TabContent(props){
@@ -35,7 +38,7 @@ const useStyles = makeStyles((theme) =>
             flexGrow: 1,
         },
         appBar: {
-            top: 175,
+            top: 95,
             backgroundColor: '#008678',
             position: 'fixed'
         },
@@ -46,16 +49,26 @@ const useStyles = makeStyles((theme) =>
             flexGrow: 1
         },
         tabContent:{
-            backgroundColor: '#6fe9d8',
-            paddingTop: 223
+            backgroundColor: '#dcdddd',
+            paddingTop: 143
         },
         emptyTab:{
             textAlign: 'center',
-            color: '#ffffff',
+            color: '#333333',
             marginTop: 100
         }
     }),
 );
+
+
+const theme = createMuiTheme({
+    palette: {
+        primary: teal,
+        secondary: {
+            main: "#33B6A7",
+        }
+      }
+  });
 
 
 function Main(props){
@@ -69,10 +82,13 @@ function Main(props){
         <div>
             <Banner />
             <AppBar className={classes.appBar} position="static">
-                <Tabs indicatorColor="primary" value={value} onChange={handleChange} centered={true} className={classes.tabs} aria-label="simple tabs example">
-                    <Tab className={classes.tab} label="活動" />
-                    <Tab className={classes.tab} label="組織" />
-                </Tabs>
+                <ThemeProvider theme={theme}>
+                    <Tabs indicatorColor="secondary" value={value} onChange={handleChange} centered={true} className={classes.tabs} aria-label="simple tabs example">
+                        <Tab className={classes.tab} label="活動" />
+                        <Tab className={classes.tab} label="組織" />
+                        <Tab className={classes.tab} label="關於我們" />
+                    </Tabs>
+                </ThemeProvider>
             </AppBar>
             <TabContent index={0} value={value}>
                 <div className={classes.emptyTab}>
@@ -81,6 +97,9 @@ function Main(props){
             </TabContent>
             <TabContent index={1} value={value}>
                 <Organization data={orgData}/>
+            </TabContent>
+            <TabContent index={2} value={value}>
+                <AboutUs/>
             </TabContent>
 
         </div>

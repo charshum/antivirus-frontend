@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './style.css'
-import banner from '../../../assets/images/banner-thin.png'
-import bannerMobile from '../../../assets/images/banner-mobile.png'
+import banner from '../../../assets/images/Banner_Web.png'
+import bannerMobile from '../../../assets/images/Banner_Mobile.png'
 function Banner(){
     return(
         <div className="banner">
