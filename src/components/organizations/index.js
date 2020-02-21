@@ -433,7 +433,7 @@ function Organization(props){
                 <Map center={[ 22.5657, 114.0972]} zoom={11} minZoom={10} maxBounds={bounds} >
                     <TileLayer
                         url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        attribution='&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors © <a target="_blank" href="https://carto.com/attributions">CARTO</a>'
                     />
                     {displayData.map(org => {
                         if(org.lat > 0){
