@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { KeyValueRow, KeyListValueRow } from './KeyValueRow';
 import ContactIcon from './ContactIcon';
@@ -98,7 +97,7 @@ function OrganizationCard(props){
                 {displayFields.map(f => {
                     if(org[f.key] != ''){
                         return (
-                            <KeyValueRow keyName={f.title} value={org[f.key]}/>
+                            <KeyValueRow key={f.key} keyName={f.title} value={org[f.key]}/>
                         )
                     }
                     
@@ -111,7 +110,7 @@ function OrganizationCard(props){
                     linkFields.map(link => {
                         if(org[link.key] != ''){
                             return (
-                                <ContactIcon link={org[link.key]} type={link.type}/>
+                                <ContactIcon key={link.key} link={org[link.key]} type={link.type}/>
                             )
                         }else{
                             return ("")

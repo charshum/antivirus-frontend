@@ -2,15 +2,28 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Main from './components/main';
 import axios from 'axios'
+import { makeStyles } from '@material-ui/core/styles';
+import { withRouter, Switch, Route, Link, BrowserRouter } from 'react-router-dom';
 
-function App() {
+
+const useStyles = makeStyles({
+        emptyComponent:{
+            height:0,
+            width:0
+        }
+});
+
+
+
+function App(props) {
 
   const [orgData, setOrgData] = useState([]);
+  const [currentTab, setTab] = useState(1);
 
   useEffect(() => {
     axios
       .get(
-        "https://go-api-dot-antivirus-center.appspot.com/getOrg",
+        "https://api.antivirushk.com/getOrg",
         {
           auth: {
             username: 'admin',
@@ -23,8 +36,18 @@ function App() {
       });
   }, []);
 
+
+  const onRouteChanged = (tab) => {
+    setTab(tab);
+  }
+  
+
+ 
   return (
-    <Main orgData={orgData}/>
+    <div>
+      <Main orgData={orgData} tab={currentTab}/>      
+    </div>
+
   );
 }
 

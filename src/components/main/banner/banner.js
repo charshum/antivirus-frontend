@@ -6,9 +6,9 @@ function Banner(){
     return(
         <div className="banner">
             <picture>
-                <source media="(min-width: 601px)" srcset={banner}/>
-                <source media="(max-width: 600px)" srcset={bannerMobile}/>
-                <img class="banner-image" src={banner}/>
+                <source media="(min-width: 601px)" srcSet={banner}/>
+                <source media="(max-width: 600px)" srcSet={bannerMobile}/>
+                <img className="banner-image" src={banner}/>
             </picture>
         </div>
     )

@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React, { Children, useEffect } from 'react';
 import style from './style.css';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -8,7 +8,9 @@ import { createMuiTheme, makeStyles, ThemeProvider, createStyles } from '@materi
 import Banner from './banner/banner';
 import Organization from '../organizations';
 import teal from '@material-ui/core/colors/teal';
+import { CompulsoryQuarantineMap } from '../compulsoryQuarantine'
 import { AboutUs } from '../aboutus';
+import { Switch, Route, Link, BrowserRouter } from 'react-router-dom';
 
 
 
@@ -52,10 +54,17 @@ const useStyles = makeStyles((theme) =>
             backgroundColor: '#dcdddd',
             paddingTop: 143
         },
+        hide:{
+            display: 'none'
+        },
         emptyTab:{
             textAlign: 'center',
             color: '#333333',
             marginTop: 100
+        },
+        emptyComponent:{
+            height:0,
+            width:0
         }
     }),
 );
@@ -70,39 +79,49 @@ const theme = createMuiTheme({
       }
   });
 
-
 function Main(props){
-    const { orgData } = props
+    const { orgData, tab } = props
     const [value, setValue] = React.useState(1);
+
+    /*useEffect(()=>{
+        setValue(tab);
+    })*/
     const classes = useStyles();
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
     return (
-        <div>
+        <BrowserRouter>
             <Banner />
             <AppBar className={classes.appBar} position="static">
                 <ThemeProvider theme={theme}>
                     <Tabs indicatorColor="secondary" value={value} onChange={handleChange} centered={true} className={classes.tabs} aria-label="simple tabs example">
-                        <Tab className={classes.tab} label="活動" />
-                        <Tab className={classes.tab} label="組織" />
+                        {/* <Tab className={classes.tab} label="活動" /> */}
+                        {/* <Tab component={Link} to="/resources-point" className={classes.tab} label="資源分配點" />
+                        <Tab component={Link} to="/599c-list" className={classes.tab} label="599C 強制檢疫名單" />
+                        <Tab component={Link} to="/about-us" className={classes.tab} label="關於我們" /> */}
+                        <Tab className={classes.tab} label="資源分配點" />
+                        <Tab className={classes.tab} label="599C 強制檢疫名單" />
                         <Tab className={classes.tab} label="關於我們" />
                     </Tabs>
                 </ThemeProvider>
             </AppBar>
-            <TabContent index={0} value={value}>
+{/*             <div className={classes.tabContent+" "+(value !== 0 ? classes.hide : "")} >
                 <div className={classes.emptyTab}>
                     {"暫無活動"}
                 </div>
-            </TabContent>
-            <TabContent index={1} value={value}>
+            </div> */}
+            <div className={classes.tabContent+" "+(value !== 0 ? classes.hide : "")}>
                 <Organization data={orgData}/>
-            </TabContent>
-            <TabContent index={2} value={value}>
+            </div>
+            <div className={classes.tabContent+" "+(value !== 1 ? classes.hide : "")}>
+                <CompulsoryQuarantineMap />
+            </div>
+            <div className={classes.tabContent+" "+(value !== 2 ? classes.hide : "")}>
                 <AboutUs/>
-            </TabContent>
-
-        </div>
+            </div>
+        </BrowserRouter>
 
         
     )

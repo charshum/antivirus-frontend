@@ -32,7 +32,7 @@ export function KeyListValueRow(props){
                     {
                         valueList.map(value => {
                             if(value != ''){
-                                return(<Typography  className={classes.value} color="textSecondary" gutterBottom>
+                                return(<Typography  key={value} className={classes.value} color="textSecondary" gutterBottom>
                                     {value}
                                 </Typography>)                              
                             }else{

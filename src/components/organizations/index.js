@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, createRef, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import OrganizationCard from './OrganizationCard';
 import Grid from '@material-ui/core/Grid';
@@ -188,78 +188,96 @@ export const RESOURCES_LIST = [
     }
 ]
 
-const DISTRICT_LIST = [
+export const DISTRICT_LIST = [
     {
         id: 1,
-        text: "Central and Western 中西區"
+        text: "Central and Western 中西區",
+        chiKey:"中西區"
     },
     {
         id: 2,
-        text: "Eastern 東區"
+        text: "Eastern 東區",
+        chiKey:"東區"
     },
     {
         id: 3,
-        text: "Southern 南區"
+        text: "Southern 南區",
+        chiKey:"南區"
     },
     {
         id: 4,
-        text: "Wan Chai 灣仔區"
+        text: "Wan Chai 灣仔區",
+        chiKey:"灣仔"
     },
     {
         id: 5,
-        text: "Sham Shui Po 深水埗區"
+        text: "Sham Shui Po 深水埗區",
+        chiKey:"深水埗"
     },
     {
         id: 6,
-        text: "Kowloon City 九龍城區"
+        text: "Kowloon City 九龍城區",
+        chiKey:"九龍城"
     },
     {
         id: 7,
-        text: "Kwun Tong 觀塘區"
+        text: "Kwun Tong 觀塘區",
+        chiKey:"觀塘"
     },
     {
         id: 8,
-        text: "Wong Tai Sin 黃大仙區"
+        text: "Wong Tai Sin 黃大仙區",
+        chiKey:"黃大仙"
     },
     {
         id: 9,
-        text: "Yau Tsim Mong 油尖旺區"
+        text: "Yau Tsim Mong 油尖旺區",
+        chiKey:"油尖旺"
     },
     {
         id: 10,
-        text: "Islands 離島區"
+        text: "Islands 離島區",
+        chiKey:"離島"
     },
     {
         id: 11,
-        text: "Kwai Tsing 葵青區"
+        text: "Kwai Tsing 葵青區",
+        chiKey:"葵青"
     },
     {
         id: 12,
-        text: "North 北區"
+        text: "North 北區",
+        chiKey:"北區"
     },
     {
         id: 13,
-        text: "Sai Kung 西貢區"
+        text: "Sai Kung 西貢區",
+        chiKey:"西貢"
     },
     {
         id: 14,
-        text: "Sha Tin 沙田區"
+        text: "Sha Tin 沙田區",
+        chiKey:"沙田"
     },
     {
         id: 15,
-        text: "Tai Po 大埔區"
+        text: "Tai Po 大埔區",
+        chiKey:"大埔"
     },
     {
         id: 16,
-        text: "Tsuen Wan 荃灣區"
+        text: "Tsuen Wan 荃灣區",
+        chiKey:"荃灣"
     },
     {
         id: 17,
-        text: "Tuen Mun 屯門區"
+        text: "Tuen Mun 屯門區",
+        chiKey:"屯門"
     },
     {
         id: 18,
-        text: "Yuen Long 元朗區"
+        text: "Yuen Long 元朗區",
+        chiKey:"元朗"
     }
 ]
 
@@ -330,6 +348,7 @@ function getShowHideSearchFAB(width, showSearch, mapView){
     }
 }
 
+const mapRef = createRef()
 
 function Organization(props){
     const { height, width } = useWindowDimensions();
@@ -351,7 +370,13 @@ function Organization(props){
 
     useEffect(() => { setDisplayData(data) }, [data])
 
-    
+    useEffect(()=>{
+        const map = mapRef.current
+        if(map != null){
+           //console.log(map)
+           map.leafletElement.invalidateSize(); 
+        }
+    })
 
     const onMarkerClicked = (id) => {
         console.log(id);
@@ -430,7 +455,7 @@ function Organization(props){
                 </Fab>
             </div>
             <div hidden={mapView == 1}>
-                <Map center={[ 22.5657, 114.0972]} zoom={11} minZoom={10} maxBounds={bounds} >
+                <Map center={[ 22.5657, 114.0972]} zoom={11} minZoom={10} maxBounds={bounds} ref={mapRef}>
                     <TileLayer
                         url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
                         attribution='&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors © <a target="_blank" href="https://carto.com/attributions">CARTO</a>'
@@ -438,7 +463,7 @@ function Organization(props){
                     {displayData.map(org => {
                         if(org.lat > 0){
                             return(
-                                <Marker onClick={() => onMarkerClicked(org.id)} position={[org.lat, org.lng]}>
+                                <Marker key={org.id} onClick={() => onMarkerClicked(org.id)} position={[org.lat, org.lng]}>
                                     <Tooltip>
                                         {org.name}
                                     </Tooltip>
@@ -466,7 +491,7 @@ function Organization(props){
                 <Grid className={classes.root} container justify="center" spacing={0}>
                     {displayData.map(org => {
                     return(
-                        <Grid item md={12} className={classes.item}>
+                        <Grid item md={12} className={classes.item} key={org.id}>
                             <OrganizationCard org={org}/>
                         </Grid>
                         
