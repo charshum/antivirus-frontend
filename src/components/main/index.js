@@ -1,16 +1,13 @@
 import React, { Children, useEffect } from 'react';
-import style from './style.css';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import { createMuiTheme, makeStyles, ThemeProvider, createStyles } from '@material-ui/core/styles';
 import Banner from './banner/banner';
 import Organization from '../organizations';
 import teal from '@material-ui/core/colors/teal';
 import { CompulsoryQuarantineMap } from '../compulsoryQuarantine'
 import { AboutUs } from '../aboutus';
-import { Switch, Route, Link, BrowserRouter } from 'react-router-dom';
 
 
 
@@ -40,9 +37,9 @@ const useStyles = makeStyles((theme) =>
             flexGrow: 1,
         },
         appBar: {
-            top: 95,
+            //top: 95,
             backgroundColor: '#008678',
-            position: 'fixed'
+            //position: 'fixed'
         },
         tabs:{
             display: 'flex'
@@ -52,7 +49,7 @@ const useStyles = makeStyles((theme) =>
         },
         tabContent:{
             backgroundColor: '#dcdddd',
-            paddingTop: 143
+            //paddingTop: 143
         },
         hide:{
             display: 'none'
@@ -92,7 +89,7 @@ function Main(props){
     };
 
     return (
-        <BrowserRouter>
+        <div>
             <Banner />
             <AppBar className={classes.appBar} position="static">
                 <ThemeProvider theme={theme}>
@@ -121,7 +118,7 @@ function Main(props){
             <div className={classes.tabContent+" "+(value !== 2 ? classes.hide : "")}>
                 <AboutUs/>
             </div>
-        </BrowserRouter>
+        </div>
 
         
     )

@@ -12,6 +12,17 @@ const useStyles = makeStyles({
         fontSize: 14
 
     },
+    labelL:{
+        flexGrow: 1,
+        width: '75%',
+        fontSize: 14
+
+    },
+    valueL:{
+        flexGrow: 1,
+        width: '25%',
+        fontSize: 14
+    },
     value:{
         flexGrow: 1,
         width: '75%',
@@ -21,14 +32,17 @@ const useStyles = makeStyles({
 });
 
 export function KeyListValueRow(props){
-    const {keyName, valueList} = props;
+    const {keyName, valueList, keyLonger} = props;
     const classes = useStyles();
+    let labelClass = keyLonger ? classes.labelL : classes.label
+    let valueClass = keyLonger ? classes.valueL : classes.value
+
     return (
         <div className={classes.row}>
-            <Typography className={classes.label} color="textSecondary" gutterBottom>
+            <Typography className={labelClass} color="textSecondary" gutterBottom>
                 {keyName}
             </Typography>
-            <div className={classes.value}>
+            <div className={valueClass}>
                     {
                         valueList.map(value => {
                             if(value != ''){
@@ -48,14 +62,18 @@ export function KeyListValueRow(props){
 
 
 export function KeyValueRow(props){
-    const {keyName, value} = props;
+    const {keyName, value, keyLonger} = props;
     const classes = useStyles();
+    let labelClass = keyLonger ? classes.labelL : classes.label
+    let valueClass = keyLonger ? classes.valueL : classes.value
+
+    
     return (
         <div className={classes.row}>
-            <Typography className={classes.label} color="textSecondary" gutterBottom>
+            <Typography className={labelClass} color="textSecondary" gutterBottom>
                 {keyName}
             </Typography>
-            <Typography className={classes.value} color="textSecondary" gutterBottom>
+            <Typography className={valueClass} color="textSecondary" gutterBottom>
                 {value}
             </Typography>
         </div>

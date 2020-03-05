@@ -39,23 +39,39 @@ const useStyles = makeStyles({
       right: 30
   },
   searchComponentMobile:{
-    top: 143,
+   /*  top: 143,
     position: 'fixed',
     background: '#008678',
     height: 'calc(100% - 143px)',
-    right: 0
+    right: 0 */
+    right: 20,
+    height: 400,
+    zIndex: 1200,
+    position: 'fixed',
+    background: '#008678',
+    paddingTop: 30,
+    borderRadius: 20,
+    marginTop: 10
   },
   searchComponentBg:{
-    position: 'fixed',
-    top: 143,
-    right: 0,
+    //position: 'fixed',
+    //top: 143,
+    //right: 0,
+    //zIndex: 1200,
+    //height: 'calc(100% - 143px)',
+    //background: '#008678',
+    right: 20,
+    height: 400,
     zIndex: 1200,
-    height: 'calc(100% - 143px)',
+    position: 'fixed',
     background: '#008678',
+    paddingTop: 30,
+    borderRadius: 20,
+    marginTop: 10
     
   },
   searchComponentMobileHide:{
-    transform: 'translateX(290px)'
+    transform: 'translateX(310px)'
   },
   currentCard:{
     position: 'absolute',
@@ -80,9 +96,10 @@ const useStyles = makeStyles({
     }
   },
   item:{
-      marginLeft: 20,
-      marginRight: 20,
-      marginBottom: 20
+    paddingLeft: 20,
+    paddingRight: 20,
+    marginBottom: 20,
+    minWidth: '100%'
   },
   viewButton:{
       background: '#ffffff',
@@ -112,12 +129,12 @@ const useStyles = makeStyles({
 
   },
   hideSearchComponent:{
-      transform: 'translateX(290px)',
+      transform: 'translateX(310px)',
       position: 'fixed',
-      top: 143,
-      right: 0,
+    //   top: 143,
+      right: 20,
       zIndex: 1200,
-      height: 'calc(100% - 143px)',
+    //  height: 'calc(100% - 143px)',
       background: '#008678',
   },
   cardBar:{
@@ -188,96 +205,157 @@ export const RESOURCES_LIST = [
     }
 ]
 
+export const CITY = [
+    {
+        name: '香港島 Hong Kong Island',
+        shortName: '香港HK',
+        id:'HK',
+        district:[1,4,2,3],
+        latlng:[22.271410, 114.181519],
+        zoom: 13
+    },{
+        name: '九龍 Kowloon',
+        shortName: '九龍KLN',
+        id: 'KLN',
+        district: [5,6,7,8,9],
+        latlng:[22.318567, 114.179604],
+        zoom: 13
+    },{
+        name: '新界 New Territory',
+        id: 'NT',
+        shortName: '新界NT',
+        district: [10,11,12,13,14,15,16,17,18],
+        latlng:[22.432453, 114.156676],
+        zoom: 12
+    }
+]
+
 export const DISTRICT_LIST = [
     {
         id: 1,
         text: "Central and Western 中西區",
-        chiKey:"中西區"
+        chiKey:"中西區",
+        latlng:[22.285638, 114.139035],
+        zoom: 14
     },
     {
         id: 2,
         text: "Eastern 東區",
-        chiKey:"東區"
+        chiKey:"東區",
+        latlng:[22.281182, 114.224866],
+        zoom: 14
     },
     {
         id: 3,
         text: "Southern 南區",
-        chiKey:"南區"
+        chiKey:"南區",
+        latlng:[22.254406, 114.163007],
+        zoom: 14
     },
     {
         id: 4,
         text: "Wan Chai 灣仔區",
-        chiKey:"灣仔"
+        chiKey:"灣仔",
+        latlng:[22.279738, 114.178285],
+        zoom: 14
     },
     {
         id: 5,
         text: "Sham Shui Po 深水埗區",
-        chiKey:"深水埗"
+        chiKey:"深水埗",
+        latlng:[22.334226, 114.154779],
+        zoom: 14
     },
     {
         id: 6,
         text: "Kowloon City 九龍城區",
-        chiKey:"九龍城"
+        chiKey:"九龍城",
+        latlng:[22.324479, 114.186925],
+        zoom: 14
     },
     {
         id: 7,
         text: "Kwun Tong 觀塘區",
-        chiKey:"觀塘"
+        chiKey:"觀塘",
+        latlng:[22.313472, 114.223469],
+        zoom: 14
     },
     {
         id: 8,
         text: "Wong Tai Sin 黃大仙區",
-        chiKey:"黃大仙"
+        chiKey:"黃大仙",
+        latlng:[22.341179, 114.197033],
+        zoom: 14
     },
     {
         id: 9,
         text: "Yau Tsim Mong 油尖旺區",
-        chiKey:"油尖旺"
+        chiKey:"油尖旺",
+        latlng:[22.312074, 114.170176],
+        zoom: 14
     },
     {
         id: 10,
         text: "Islands 離島區",
-        chiKey:"離島"
+        chiKey:"離島",
+        latlng:[22.250228, 114.044980],
+        zoom: 12
     },
     {
         id: 11,
         text: "Kwai Tsing 葵青區",
-        chiKey:"葵青"
+        chiKey:"葵青",
+        latlng:[22.356903, 114.118149],
+        zoom: 14
     },
     {
         id: 12,
         text: "North 北區",
-        chiKey:"北區"
+        chiKey:"北區",
+        latlng:[22.499720, 114.135636],
+        zoom: 13
     },
     {
         id: 13,
         text: "Sai Kung 西貢區",
-        chiKey:"西貢"
+        chiKey:"西貢",
+        latlng:[22.314639, 114.263651],
+        zoom: 14
     },
     {
         id: 14,
         text: "Sha Tin 沙田區",
-        chiKey:"沙田"
+        chiKey:"沙田",
+        latlng:[22.390994, 114.197174],
+        zoom: 13
     },
     {
         id: 15,
         text: "Tai Po 大埔區",
-        chiKey:"大埔"
+        chiKey:"大埔",
+        latlng:[22.450982, 114.161408],
+        zoom: 13
     },
     {
         id: 16,
         text: "Tsuen Wan 荃灣區",
-        chiKey:"荃灣"
+        chiKey:"荃灣",
+        latlng:[22.369889, 114.115296],
+        zoom: 14
     },
     {
         id: 17,
         text: "Tuen Mun 屯門區",
-        chiKey:"屯門"
+        chiKey:"屯門",
+        latlng:[22.391581, 113.972376],
+        zoom: 14
     },
     {
         id: 18,
         text: "Yuen Long 元朗區",
-        chiKey:"元朗"
+        chiKey:"元朗",
+        latlng:[22.445099, 114.022161],
+        zoom: 13
     }
 ]
 
