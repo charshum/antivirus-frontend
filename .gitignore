@@ -12,7 +12,7 @@
 /build
 
 /appengine
-
+/stg
 # misc
 .DS_Store
 .env.local
