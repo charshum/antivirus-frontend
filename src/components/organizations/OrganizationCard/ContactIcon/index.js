@@ -58,7 +58,7 @@ function ContactIcon(props){
     }
     return (
         <div className={classes.iconCircle}>
-            <a href={hrefLink}>
+            <a href={hrefLink} target="_blank">
                 <FontAwesomeIcon className={classes.icon} icon={typeData.icon}/>
             </a>
         </div>

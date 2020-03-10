@@ -22,6 +22,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-gtm-module": "^2.0.8",
+    "react-horizontal-timeline": "^1.5.3",
     "react-leaflet": "^2.6.1",
     "react-leaflet-markercluster": "^2.0.0-rc3",
     "react-router-dom": "^5.1.2",

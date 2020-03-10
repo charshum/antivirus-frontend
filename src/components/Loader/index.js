@@ -24,9 +24,9 @@ const useStyles = makeStyles({
     }
 })
 
-export function Loader(props){
+function LoaderNM(props){
     const { show } = props;
-    //console.log(show);
+    //console.log("showLoader: "+show);
     const classes = useStyles();
 
     return(
@@ -36,3 +36,9 @@ export function Loader(props){
     )
      
 }
+
+function areEqual(prevProps, nextProps){
+    return prevProps.show == nextProps.show;
+}
+
+export const Loader = React.memo(LoaderNM, areEqual);

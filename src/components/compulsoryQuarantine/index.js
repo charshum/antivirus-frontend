@@ -1,4 +1,5 @@
 import React, { useState, createRef, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Map, Marker, Popup, TileLayer, Tooltip } from "react-leaflet";
 import './style.css'
@@ -19,6 +20,9 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Button } from '@material-ui/core';
 import { Loader } from '../Loader';
 import ErrorIcon from '@material-ui/icons/Error';
+import { VersionTimeline } from './VersionTimeline';
+import DataUsageIcon from '@material-ui/icons/DataUsage';
+import TimelineIcon from '@material-ui/icons/Timeline';
 
 const useStyles = makeStyles(
     {
@@ -53,7 +57,7 @@ const useStyles = makeStyles(
             borderRadius: 25,
             padding: 10,
             backgroundColor: '#ffffff',
-            boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)',
+            boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
             "& .MuiPaper-elevation1":{
                 boxShadow: 'none'
             },
@@ -69,11 +73,17 @@ const useStyles = makeStyles(
             left: 50,
             zIndex: 1200
           },
+          timelineFab:{
+            position: 'absolute',
+            bottom: 88,
+            left: 20,
+            zIndex: 1200
+          },
           statPanel:{
             position: 'absolute',
             top: 10,
             left: 50,
-            zIndex: 1200
+            zIndex: 1300
           },
           statPanelInner:{
             display: 'flex',
@@ -139,15 +149,34 @@ const useStyles = makeStyles(
             bottom: 20,
             left: 10,
             background: '#ffffff',
-            boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)',
+            boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
             borderRadius: 10,
             zIndex: 1200,
             '&:hover':{
                 background: '#eeeeee' 
+            },
+            ['@media(max-width: 600px)']:{
+                bottom: 168
             }
           },
           reportBtn:{
             cursor: 'pointer'
+          },
+          closeTimelinePanel:{
+            left: 'calc(50vw + 130px)',
+            bottom: 173,
+            position: 'absolute',
+            width: 24,
+            height: 24,
+            zIndex: 1200,
+            background: 'white',
+            borderRadius: 12,
+            boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
+
+          },
+          closeTimelineButton:{
+            cursor: 'pointer',
+            color: '#757575'
           }
     }
 )
@@ -175,13 +204,19 @@ const blueIcon = new L.Icon({
   
 
 const MapMarker = (props) => {
-    const { quarantineBuildingData,  onMarkerClicked, notEndedOnly, hideLoader } = props;
-
-
+    const { version1 ,quarantineBuildingData,  onMarkerClicked, notEndedOnly, hideLoader } = props;
+    //console.log(version);
     useEffect(()=>{
-        //console.log("updated");
-        hideLoader();
-    },[notEndedOnly])
+        console.log("updated ");
+        console.log("useEffect marker updated: "+Date.now());
+        if(version1 != -1){
+            setTimeout(()=>{
+                hideLoader(); 
+            }, 500) 
+        }
+        
+        
+    },[notEndedOnly,version1, quarantineBuildingData])
 
     //console.log("render marker");
     return (
@@ -227,9 +262,29 @@ function areEqual(prevProps, nextProps) {
     if(!prevProps.quarantineBuildingData || !nextProps.quarantineBuildingData){
         return false;
     }
+    if(nextProps.version1 == -1){
+        return true;
+    }
+    if(prevProps.version1 != nextProps.version1){
+        //console.log('version updated')
+        return false;
+    }
     if(nextProps.quarantineBuildingData.length > prevProps.quarantineBuildingData.length){
         return false;
     }
+    
+    if(prevProps.quarantineBuildingData.length > 0){
+        if(prevProps.quarantineBuildingData[0].data == null && nextProps.quarantineBuildingData[0].data != null){
+            return false;
+        }
+    }
+
+    if(nextProps.quarantineBuildingData.length > 0){
+        if(nextProps.quarantineBuildingData[0].data == null){
+            return true;
+        }
+    }
+    
     if(prevProps.quarantineBuildingData.length == nextProps.quarantineBuildingData.length){
         return true;
     }
@@ -302,7 +357,7 @@ function StatPanel(props){
     let closePanel = (currentCity > -1 ? ' '+classes.closeIconHide:classes.closeIcon)
     return(
         <div className={classes.statPanel}>
-            <div className={classes.statPanelInner} >
+            <div className={classes.statPanelInner}>
                 <div className={cityPanelClass}>
                     {
                         cityStatData.map((city,i) => {
@@ -330,43 +385,168 @@ function StatPanel(props){
                     </div>:""
 
                 }
-                <Fab className={closePanel} onClick={onClosePanel}>
-                    <CloseIcon />
-                </Fab>
+                <div className={classes.closeIconFullHeight} onClick={onClosePanel}>
+                  <Fab className={closePanel} onClick={onClosePanel}>
+                        <CloseIcon />
+                    </Fab>  
+                </div>
+                
             </div>
         </div>
     );
 }
 
+function getWindowDimensions() {
+    const { innerWidth: width, innerHeight: height } = window;
+    return {
+      width,
+      height
+    };
+}
+
+function useWindowDimensions() {
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+  
+    useEffect(() => {
+      function handleResize() {
+        setWindowDimensions(getWindowDimensions());
+      }
+  
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
+  
+    return windowDimensions;
+}
+
 export function CompulsoryQuarantineMap(){
+
+    const { height, width } = useWindowDimensions();
+    const [dataByVersion, setDataByVersion] = useState({});
 
     const [quarantineBuildingData, setQuarantineBuildingData] = useState([]);
     const [districtStatDataList, setdistrictStatDataList] = useState([]);
+    const [versionList, setVersionList] = useState([]);
     const [currentCard, setCurrentCard] = useState(null);
 
     const [currentCity, setCurrentCity] = useState(-1);
 
     const [filterPanelOpen, setFilterPanelOpen] = useState(false);
 
+    const [timelinePanelOpen, setTimelinePanelOpen] = useState(false);
+
     const [notEndedOnly, setnotEndedOnly] = useState(false);
 
     const [showLoader, setShowLoader] = useState(false);
 
+    const [version, setVersion] = useState(-1);
+    const [version1, setVersion1] = useState(-1);
+
+    const [forceUpdate, setForceUpdate] = useState(false);
+
     useEffect(()=>{
         const map = mapRef.current
         if(map != null){
-           //console.log(map)
            map.leafletElement.invalidateSize(); 
         }
     })
 
+
     useEffect(() => {
+        axios.get("https://api.antivirushk.com/getQtBuildingListVersions",{}).then((data)=>{
+            setVersionList(data.data.versions);
+            let versionList = data.data.versions
+            ReactDOM.unstable_batchedUpdates(()=>{
+                setVersion(versionList[versionList.length-1].id);
+                setShowLoader(true);
+            });
+        })
+  
+    }, []);
+
+
+    useEffect(() => {
+        setShowLoader(true);
+        console.log("useEffect version updated: "+Date.now());
+        if(dataByVersion[version]){
+            ReactDOM.unstable_batchedUpdates(()=>{
+                console.log("useEffect data reuse: "+Date.now());
+                setVersion1(version)
+                setdistrictStatDataList(dataByVersion[version].districtStatData);
+                setQuarantineBuildingData(dataByVersion[version].buildingData);
+            })
+            
+        }else{
+            
+            let requests = [];
+            DISTRICT_LIST.forEach(district => {
+            requests.push(axios
+                .get(
+                `https://api.antivirushk.com/getQuaratineBuildingList?start=1&count=6000&district=${district.chiKey}&version=${version}`,
+                {}
+                ))                  
+            })
+            axios.all(requests).then(axios.spread((...data)=>{
+                let buildingData = [];
+                let districtStatDataList = [];
+                data.forEach(d => {
+                    let districtData = {}
+                    districtData.data = d.data.data;
+                    districtData.count = d.data.count;
+                    districtData.endedCount = d.data.endedCount
+                    districtData.percentage = ((d.data.endedCount/districtData.count) * 100).toFixed(1);
+
+                    let districtStat = {}
+                    districtStat.count = d.data.count;
+                    districtStat.endedCount = d.data.endedCount
+                    districtStat.percentage = ((d.data.endedCount/districtData.count) * 100).toFixed(1);
+                    let districtInfo = DISTRICT_LIST.find(district => district.chiKey === d.data.district);
+                    districtStat.district = districtInfo.id;
+                    districtStat.name = districtInfo.text;
+                    districtStat.latlng = districtInfo.latlng;
+                    districtStat.zoom = districtInfo.zoom;
+
+
+                    districtStatDataList.push(districtStat);
+                    buildingData.push(districtData);
+                })
+
+                let dataByVersionCopy = Object.assign({},dataByVersion);
+                dataByVersionCopy[version] = {
+                    districtStatData: districtStatDataList,
+                    buildingData: buildingData
+                }
+                
+                console.log("useEffect version data downloaded: "+Date.now());
+                
+                setTimeout(()=>{
+                    setShowLoader(true);
+                    ReactDOM.unstable_batchedUpdates(()=>{
+                        setVersion1(version)
+                        setdistrictStatDataList(districtStatDataList);
+                        setQuarantineBuildingData(buildingData);
+                        setDataByVersion(dataByVersionCopy)  
+                    })
+
+                }, 300)
+                
+                
+
+                
+            }))
+        }
+
+        
+    },[version])
+
+
+    /*useEffect(()=>{
         let requests = [];
         DISTRICT_LIST.forEach(district => {
-          requests.push(axios
+        requests.push(axios
             .get(
-              `https://api.antivirushk.com/getQuaratineBuildingList?start=1&count=6000&district=${district.chiKey}`,
-              {}
+            `https://api.antivirushk.com/getQuaratineBuildingList?start=1&count=6000&district=${district.chiKey}`,
+            {}
             ))                  
         })
         axios.all(requests).then(axios.spread((...data)=>{
@@ -395,12 +575,21 @@ export function CompulsoryQuarantineMap(){
             })
             setdistrictStatDataList(districtStatDataList);
             setQuarantineBuildingData(buildingData);
+
+            let dataByVersionCopy = Object.assign({},dataByVersion);
+            dataByVersionCopy[versionList.length] = {
+                districtStatData: districtStatDataList,
+                buildingData: buildingData
+            }
+            
+            setDataByVersion(dataByVersionCopy)
+            setVersion(versionList.length)
+            
         }))
-  
-    }, []);
+    }, [versionList])*/
 
     const classes = useStyles();
-    const NEbounds = [22.5329, 115.0]
+    const NEbounds = [22.5829, 115.05]
     const SWbounds = [22.0907, 113.2]
     const bounds = [NEbounds, SWbounds]
     const onMarkerClicked = (building) => {
@@ -412,24 +601,59 @@ export function CompulsoryQuarantineMap(){
     const handleFilterFabClicked = () => {
         setCurrentCard(null);
         setFilterPanelOpen(true)
+        if(width <= 600){
+            setTimelinePanelOpen(false)
+        }
     }
 
     const handleFilterFabClose = () => {
         setFilterPanelOpen(false)
     }
 
+    const handleTimelineFabClose = () => {
+        setTimelinePanelOpen(false)
+    }
+
+    const handleTimelineFabClicked = () => {
+        setTimelinePanelOpen(true)
+        if(width <= 600){
+            setFilterPanelOpen(false)
+        }
+    }
+
     const handleSetnotEndedOnly = (notEndedOnly) => {
         setShowLoader(true);
         setTimeout(()=>{
+            console.log("set not ended only: "+Date.now());
            setnotEndedOnly(notEndedOnly) 
         },300);
         
     }
     const hideLoader = () => {
-        setShowLoader(false);
+        console.log("hideLoader");
+        setTimeout(()=>{ 
+            setShowLoader(false);
+        },300)
+        
     }
 
-    /* const handleReport = (id) => {
+    const onTimelineClicked = (version) => {
+        //console.log(version);
+        setShowLoader(true); 
+        ReactDOM.unstable_batchedUpdates(()=>{
+            setCurrentCard(null);
+            
+            setVersion(version+1);            
+        })
+
+        
+    }
+
+    const onMapClicked = () => {
+        setFilterPanelOpen(false)
+    }
+
+    const handleReport = (id) => {
         setShowLoader(true);
         axios.post('https://api.antivirushk.com/reportQtError', {
             id: ""+id
@@ -442,14 +666,14 @@ export function CompulsoryQuarantineMap(){
             console.log(error);
             setShowLoader(false);
           });
-    } */
+    }
 
     const buttonText = notEndedOnly ? "顯示全部" : "只顯示未完成隔離大廈"
 
     return(
         <div className={classes.mapRoot}>
             <div>
-                <Map center={[ 22.5657, 114.0972]} zoom={11} minZoom={10} maxZoom={18} maxBounds={bounds} ref={mapRef}>
+                <Map center={[ 22.5057, 114.1272]} onClick={onMapClicked} zoom={11} minZoom={10} maxZoom={18} maxBounds={bounds} ref={mapRef}>
                     <TileLayer
                         url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
                         attribution='&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors © <a target="_blank" href="https://carto.com/attributions">CARTO</a>, Data from <a target="_blank" href="https://www.facebook.com/orix.auyeung/posts/10158212828713921">Orix Au Yeung</a>'
@@ -458,7 +682,8 @@ export function CompulsoryQuarantineMap(){
                     notEndedOnly={notEndedOnly}
                     onMarkerClicked={onMarkerClicked}  
                     quarantineBuildingData={quarantineBuildingData}
-                    hideLoader={hideLoader}/>
+                    hideLoader={hideLoader}
+                    version1={version1}/>
                 </Map>
             </div>
             {
@@ -479,7 +704,7 @@ export function CompulsoryQuarantineMap(){
             {
                 !filterPanelOpen ? 
                 <Fab className={classes.filter} onClick={handleFilterFabClicked}>
-                    <TrendingUpIcon />
+                    <DataUsageIcon />
                 </Fab>: ""
             }
             
@@ -491,10 +716,27 @@ export function CompulsoryQuarantineMap(){
                 notEndedOnly={notEndedOnly}
                 /> : ""
             }
-            <Button className={classes.toggleNotEndedOnlyButton} onClick={()=>handleSetnotEndedOnly(!notEndedOnly)}>
+            {
+                !timelinePanelOpen && width <= 600? 
+                <Fab className={classes.timelineFab} onClick={handleTimelineFabClicked}>
+                    <TimelineIcon />
+                </Fab>: ""
+            }
+            {
+                timelinePanelOpen || width > 600 ?
+                <div><Button className={classes.toggleNotEndedOnlyButton} onClick={()=>handleSetnotEndedOnly(!notEndedOnly)}>
                 {buttonText}
-            </Button>
+                </Button>
+                <VersionTimeline versionList={versionList} onTimelineClicked={onTimelineClicked}/> </div>: ""
+            }
+            {
+                timelinePanelOpen && width <= 600 ?
+                <div className={classes.closeTimelinePanel}>
+                    <CloseIcon className={classes.closeTimelineButton} onClick={handleTimelineFabClose}/>
+                </div> : ""
+            }
             <Loader show={showLoader}/>
+            
         </div>
 
     )
