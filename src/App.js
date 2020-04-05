@@ -23,13 +23,8 @@ function App(props) {
   useEffect(() => {
     axios
       .get(
-        "https://api.antivirushk.com/getOrg",
-        {
-          auth: {
-            username: 'admin',
-            password: 'admin'
-          }
-        }
+        "https://storage.googleapis.com/antivirus-data/organization.json",
+        {}
       )
       .then(({ data }) => {
         setOrgData(data);

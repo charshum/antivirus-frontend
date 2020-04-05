@@ -11,21 +11,35 @@ const useStyles = makeStyles({
         padding: 20,
         borderRadius: 20,
         boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)',
-        textDecoration: 'none'
+        textDecoration: 'none',
+        marginBottom: 20
     },
     imgRoot:{
-        height: 200
+        width: '100%'
+    },
+    img:{
+        display: 'block',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: '100%'
     },
     title:{
         color: '#434343',
-        textDecoration: 'none'
+        textDecoration: 'none',
+        marginTop: 10
     },
     domain:{
         color: '#434343',
         fontWeight: 600,
         fontSize: 12,
         textDecoration: 'none',
-        paddingTop: 5
+        paddingTop: 5,
+        marginTop: 10
+    },
+    description:{
+        fontSize: 14,
+        color: '#ABABAB',
+        marginTop: 10
     }
 })
 
@@ -36,11 +50,17 @@ export function ArticleLinks(props){
     return (
         <a className={classes.root} href={linkData.link} target="_blank">
             <div className={classes.imgRoot}>
-                <img src={linkData.img}/>
+                <img className={classes.img} src={linkData.img}/>
             </div>
             <div className={classes.title}>
                 {linkData.title}
             </div>
+            {
+                linkData.description != '' ? 
+                <div className={classes.description}>
+                    {linkData.description}
+                </div>:""
+            }
             <div className={classes.domain}>
                 {linkData.domain}
             </div>

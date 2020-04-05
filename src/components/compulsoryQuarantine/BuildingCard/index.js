@@ -63,3 +63,25 @@ export function BuildingCard(props){
     )
 
 }
+
+export function BuildingCardGen(props){
+    const { building, displayFields } = props;
+    const classes = useStyles();
+
+    return(
+        <Card className={classes.root}>
+            <CardContent>
+                {displayFields.map(f => {
+                    if(building[f.key] != ''){
+                        return (
+                            <KeyValueRow key={f.key} keyName={f.title} value={building[f.key]}/>
+                        )
+                    }
+                    
+                })}
+                
+            </CardContent>
+        </Card>        
+    )
+
+}

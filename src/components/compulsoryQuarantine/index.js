@@ -453,7 +453,8 @@ export function CompulsoryQuarantineMap(){
 
 
     useEffect(() => {
-        axios.get("https://api.antivirushk.com/getQtBuildingListVersions",{}).then((data)=>{
+        axios.get("https://storage.googleapis.com/antivirus-data/version.json",{
+        }).then((data)=>{
             setVersionList(data.data.versions);
             let versionList = data.data.versions
             ReactDOM.unstable_batchedUpdates(()=>{
@@ -468,6 +469,7 @@ export function CompulsoryQuarantineMap(){
     useEffect(() => {
         setShowLoader(true);
         console.log("useEffect version updated: "+Date.now());
+        
         if(dataByVersion[version]){
             ReactDOM.unstable_batchedUpdates(()=>{
                 console.log("useEffect data reuse: "+Date.now());
@@ -477,12 +479,14 @@ export function CompulsoryQuarantineMap(){
             })
             
         }else{
-            
+            if(version == -1){
+                return;
+            }
             let requests = [];
-            DISTRICT_LIST.forEach(district => {
+            DISTRICT_LIST.forEach((district,i) => {
             requests.push(axios
                 .get(
-                `https://api.antivirushk.com/getQuaratineBuildingList?start=1&count=6000&district=${district.chiKey}&version=${version}`,
+                `https://storage.googleapis.com/antivirus-data/version${version}/compulsory_quaratine_${i}.json`,
                 {}
                 ))                  
             })
@@ -670,13 +674,19 @@ export function CompulsoryQuarantineMap(){
 
     const buttonText = notEndedOnly ? "顯示全部" : "只顯示未完成隔離大廈"
 
+    const dataAttribution = version > 4 ? "" : `, 
+    Data from <a target="_blank" href="https://www.facebook.com/orix.auyeung/posts/10158212828713921">Orix Au Yeung</a>`
+
+    const attribution = `&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> 
+    contributors © <a target="_blank" href="https://carto.com/attributions">CARTO</a>${dataAttribution}`
+
     return(
         <div className={classes.mapRoot}>
             <div>
                 <Map center={[ 22.5057, 114.1272]} onClick={onMapClicked} zoom={11} minZoom={10} maxZoom={18} maxBounds={bounds} ref={mapRef}>
                     <TileLayer
                         url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-                        attribution='&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors © <a target="_blank" href="https://carto.com/attributions">CARTO</a>, Data from <a target="_blank" href="https://www.facebook.com/orix.auyeung/posts/10158212828713921">Orix Au Yeung</a>'
+                        attribution={attribution}
                     />
                     <MapMarkerMemo
                     notEndedOnly={notEndedOnly}
