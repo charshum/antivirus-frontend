@@ -14,7 +14,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { SelfCheck } from '../selfcheck';
 import { CasesLivingAddress } from '../casesLivingAddress';
-
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 
 
@@ -178,7 +178,7 @@ function Main(props){
                 </div> */}
                 <div className={classes.menu}>
                     <Button className={mapMenuClass} aria-controls="simple-menu" aria-haspopup="true" onClick={handleMapMenuClick}>
-                        {mapMenuTitle} 
+                        {mapMenuTitle} <ArrowDropDownIcon ></ArrowDropDownIcon>
                     </Button>
                     <Menu
                         id="simple-menu"
@@ -187,13 +187,13 @@ function Main(props){
                         open={Boolean(mapMenuAnchorEl)}
                         onClose={() => handleMenuClose(-1)}>
                         <MenuItem onClick={() => handleMenuClose(2)}>{"確診或疑似個案居住過的住宅大廈名單"}</MenuItem>
-                        <MenuItem onClick={() => handleMenuClose(1)}>{"599C 強制檢疫名單"}</MenuItem>
+                        {/* <MenuItem onClick={() => handleMenuClose(1)}>{"599C 強制檢疫名單"}</MenuItem> */}
                         <MenuItem onClick={() => handleMenuClose(0)}>{"資源分配點"}</MenuItem>
                     </Menu>
                 </div>
                 <div className={classes.menu}>
                     <Button className={aboutMenuClass} aria-controls="simple-menu" aria-haspopup="true" onClick={handleAboutMenuClick}>
-                        {aboutMenuTitle} 
+                        {aboutMenuTitle} <ArrowDropDownIcon ></ArrowDropDownIcon>
                     </Button>
                     <Menu
                         id="simple-menu"
@@ -214,9 +214,9 @@ function Main(props){
             <div className={classes.tabContent+" "+(value !== 0 ? classes.hide : "")}>
                 <Organization data={orgData}/>
             </div>
-            <div className={classes.tabContent+" "+(value !== 1 ? classes.hide : "")}>
+            {/* <div className={classes.tabContent+" "+(value !== 1 ? classes.hide : "")}>
                 <CompulsoryQuarantineMap />
-            </div>
+            </div> */}
             <div className={classes.tabContent+" "+(value !== 2 ? classes.hide : "")}>
                 <CasesLivingAddress />
             </div>
